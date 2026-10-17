@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>辣椒行情通 V6 · 临颍收购决策助手</title>
+<style>
+:root{--red:#c9332b;--red2:#fff0ed;--ink:#202124;--muted:#7a7d83;--line:#eee;--bg:#f6f7f9;--green:#16845b}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;color:var(--ink)}
+.app{max-width:480px;margin:auto;min-height:100vh;background:#f7f7f8;padding-bottom:76px}.top{background:linear-gradient(135deg,#b92320,#e34b3e);color:white;padding:24px 18px 22px;border-radius:0 0 22px 22px}
+.brand{display:flex;align-items:center;justify-content:space-between;font-size:13px;opacity:.95}.brand strong{font-size:21px;letter-spacing:1px}.pill{border:1px solid #ffffff70;padding:5px 9px;border-radius:20px;font-size:11px}
+h1{font-size:23px;margin:22px 0 5px}.sub{font-size:12px;opacity:.88}.search{margin-top:17px;background:white;color:#9a9a9a;border-radius:12px;padding:12px 14px;font-size:13px}
+.content{padding:15px}.section-head{display:flex;justify-content:space-between;align-items:center;margin:5px 0 12px}.section-head h2{font-size:16px;margin:0}.small{font-size:11px;color:var(--muted)}.card{background:white;border-radius:15px;padding:15px;margin-bottom:12px;box-shadow:0 2px 12px #00000005}.price-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.price-card{background:#fff8f6;border-radius:12px;padding:12px}.label{font-size:12px;color:#686868}.price{font-size:23px;font-weight:750;margin:7px 0 5px;color:#222}.unit{font-size:11px;font-weight:400;color:#777}.up{font-size:11px;color:var(--red)}.down{font-size:11px;color:var(--green)}.tag{display:inline-block;font-size:10px;background:#fff0ed;color:#b52a23;padding:4px 7px;border-radius:6px;margin:2px 4px 2px 0}.row{display:flex;justify-content:space-between;gap:10px;align-items:center}.list-item{padding:12px 0;border-bottom:1px solid #f0f0f0}.list-item:last-child{border:0}.list-item strong{font-size:13px}.list-item p{font-size:11px;color:var(--muted);margin:5px 0 0;line-height:1.5}.tabs{display:flex;gap:8px;overflow:auto;padding:2px 0 12px}.chip{white-space:nowrap;border:1px solid #e7e7e7;background:white;border-radius:20px;padding:8px 12px;font-size:12px;color:#666}.chip.active{background:var(--red);color:white;border-color:var(--red)}.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;display:flex;background:#fff;border-top:1px solid #eee;padding:8px 4px calc(8px + env(safe-area-inset-bottom));z-index:4}.nav button{flex:1;border:0;background:white;color:#777;font-size:11px;padding:5px 0}.nav button b{display:block;font-size:19px;margin-bottom:3px;font-weight:500}.nav button.active{color:var(--red)}.notice{font-size:11px;line-height:1.6;color:#805b20;background:#fff7e7;padding:10px 12px;border-radius:10px;margin-bottom:12px}.btn{border:0;border-radius:10px;background:var(--red);color:white;padding:10px 13px;font-size:12px}.outline{background:white;color:var(--red);border:1px solid #e7b6b2}.input{width:100%;border:1px solid #eee;border-radius:10px;padding:11px;font-size:13px;margin:6px 0 10px;background:#fff}.fieldlabel{font-size:12px;color:#666}.hide{display:none}.chart{height:100px;width:100%;display:block}.statline{display:flex;gap:18px;font-size:11px;color:#777;margin-top:8px}.statline b{font-size:13px;color:#222;display:block;margin-top:4px}.footer-note{text-align:center;color:#999;font-size:10px;padding:12px 0}.empty{font-size:12px;color:#999;text-align:center;padding:22px}
+
+.calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.calc-grid .fieldlabel{display:block;margin-top:3px}.calc-grid .input{margin-bottom:4px}.result{background:#fff5f0;border:1px solid #f4d6ce;border-radius:13px;padding:15px;margin-top:13px}.result strong{font-size:24px;color:#ae2823}.result p{margin:7px 0;font-size:12px;line-height:1.6}.hint{color:#7a7d83;font-size:11px;line-height:1.65}.comparison{display:grid;grid-template-columns:1fr 1fr;gap:10px}.comparison>div{background:#f6f7f9;padding:11px;border-radius:12px}.nav button{font-size:10px}.focus{background:#fff7e9;border:1px solid #ffe2a6;padding:12px;border-radius:12px;margin-bottom:12px;font-size:12px;line-height:1.65}
+#cmpList .list-item{border-bottom:1px solid #ececec}.nav button{font-size:10px;min-width:0}.nav button b{font-size:18px}.hint{overflow-wrap:anywhere}a{color:#b92320}input,select,button{touch-action:manipulation}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="top">
+ <div class="brand"><strong>🌶 辣椒行情通</strong><span class="pill">V6 · 行情核验</span></div>
+ <h1>看行情，找货源，做生意</h1><div class="sub">临颍为参考地 · 全国比价、到货成本与行情查询</div>
+ <div class="search" onclick="switchTab('prices')">⌕　录入并查找自己的产区报价 →</div>
+</header>
+<main class="content">
+<section id="home">
+ <div class="focus"><strong>📍 收购目的地：河南省漯河市临颍县</strong><br>本版不提供未经核验的“今日价格”。先记真实询价，再按同规格和到货成本决定收购。</div>
+ <div class="card"><div class="row"><div><strong>📒 本机已存报价</strong><p class="small">沿用 V3 / V4 报价数据，切换网页不会主动清空</p></div><div style="text-align:right"><strong id="homeQuoteCount" style="font-size:25px;color:var(--red)">0</strong><div class="small">条记录</div></div></div><div class="row" style="margin-top:13px"><button class="btn" onclick="switchTab('prices')">录入报价</button><button class="btn outline" onclick="switchTab('compare')">查看同规格比价 →</button></div></div>
+ <div class="card"><strong>🧭 临颍收购决策 · 三步走</strong>
+ <div class="list-item"><strong>① 核实原始价格</strong><p>记录产地、品种、等级、报价日期、交易类型、来源；必要时核实含水量、杂质、税费。</p></div>
+ <div class="list-item"><strong>② 对比同规格报价</strong><p>不同等级、价格类型不混合；优先看 7 天内的记录，旧报价有明显提示。</p></div>
+ <div class="list-item"><strong>③ 算到临颍净货成本</strong><p>计入采购量、运费、装卸、损耗、包装、仓储、税费和资金成本。</p></div></div>
+ <div class="card"><div class="section-head"><h2>常用功能</h2></div><div class="row" style="flex-wrap:wrap"><button class="btn outline" onclick="switchTab('compare')">📊 产区比价</button><button class="btn outline" onclick="switchTab('purchase')">🚚 到货成本</button><button class="btn outline" onclick="switchTab('news')">🔎 行情来源入口</button></div></div>
+ <div class="notice">重要：本工具没有连接实时官方报价 API，也不会自动抓取最新价格。自行录入、外部公开资料和实际成交必须分开核实；不展示虚构行情数字。</div>
+</section>
+
+<section id="prices" class="hide">
+ <div class="section-head"><h2>📒 行情核验报价簿</h2><span class="small">当前设备本地记录</span></div>
+ <div class="notice">仅展示你自己录入的数据，尚未通过平台核验。价格只能在统一品种、等级、水分、杂质、计价单位和交易类型后比较。建议保留来源证据。</div>
+ <div class="card" id="quoteBook"><div class="section-head"><h2>📒 我的报价记录</h2><span class="small">本机保存 · 非平台认证</span></div>
+ <div class="notice">可录入亲自核实的收购价、电话询价或公开参考价。仅保存在当前浏览器内；清理网站数据或更换设备可能丢失，请定期导出备份。未经核实请勿标注“实地成交”。</div>
+ <label class="fieldlabel" for="qDate">报价日期</label><input class="input" id="qDate" type="date">
+ <div class="calc-grid"><div><label class="fieldlabel" for="qVariety">辣椒品种</label><input class="input" id="qVariety" placeholder="如：三樱椒"></div><div><label class="fieldlabel" for="qGrade">货品等级</label><input class="input" id="qGrade" placeholder="如：下统 / 通货"></div></div>
+ <label class="fieldlabel" for="qPlace">具体产地</label><input class="input" id="qPlace" placeholder="如：河南临颍 / 山东金乡">
+ <div class="calc-grid"><div><label class="fieldlabel" for="qPrice">报价金额（元）</label><input class="input" id="qPrice" type="number" min="0" step="0.01" placeholder="如：9.50" inputmode="decimal"></div><div><label class="fieldlabel" for="qUnit">计价单位</label><select class="input" id="qUnit"><option value="斤">元/斤</option><option value="公斤">元/公斤</option></select></div></div>
+ <label class="fieldlabel" for="qKind">价格类型</label><select class="input" id="qKind"><option>产地收购报价</option><option>市场批发报价</option><option>实际成交价</option><option>其他参考报价</option></select>
+ <label class="fieldlabel" for="qSource">信息来源（必填）</label><input class="input" id="qSource" placeholder="发布单位、询价人或成交方（不要填敏感身份信息）">
+ <label class="fieldlabel" for="qUrl">原始报价链接（公开网络资料建议填写）</label><input class="input" id="qUrl" type="url" placeholder="https://...；电话/线下记录可留空" autocapitalize="off">
+ <div class="calc-grid"><div><label class="fieldlabel" for="qMethod">信息取得方式</label><select class="input" id="qMethod"><option>自行记录</option><option>官网公开报价</option><option>电话询价</option><option>实地询价</option><option>实际成交凭证</option></select></div><div><label class="fieldlabel" for="qCheck">核验状态</label><select class="input" id="qCheck"><option>待核实</option><option>本人已复核</option></select></div></div>
+ <div class="notice">“本人已复核”仅代表你自己已检查，不是本平台、政府或发布方的认证。网页不能自动验证来源链接内容。</div>
+ <label class="fieldlabel" for="qCheckedAt">最近核验日期（本人已复核时必填）</label><input class="input" id="qCheckedAt" type="date">
+ <div class="hint">建议备注含水率、杂质、打包方式、是否含税、含运费与否，避免不同质量和交付条款的货源错误比价。</div><label class="fieldlabel" for="qRemark">附注（选填）</label><input class="input" id="qRemark" placeholder="水分、杂质、是否含税、付款方式等">
+ <button class="btn" style="width:100%;margin:8px 0" onclick="saveQuote()">保存这条报价</button>
+ <div class="row" style="margin:10px 0;flex-wrap:wrap"><strong style="font-size:13px">已保存记录 <span id="quoteCount">0</span> 条</strong><button class="btn outline" onclick="exportQuotes()">导出 CSV 备份</button></div>
+ <div class="row" style="margin-bottom:9px;flex-wrap:wrap"><button class="btn outline" onclick="document.getElementById('quoteImport').click()">导入 CSV 恢复</button><span class="small">兼容 V3–V5 旧版 9 列 CSV 和 V6 新版 13 列 CSV · 导入前确认</span></div>
+ <input id="quoteImport" type="file" accept=".csv,text/csv,text/plain" style="display:none" onchange="importQuotesFile(this.files[0]);this.value=''" aria-label="导入报价CSV文件">
+ <div class="card" style="box-shadow:none;background:#f9fafb;border:1px solid #eee;padding:12px"><strong style="font-size:13px">📈 我的真实报价走势</strong><p class="hint">只比较相同产地、品种、等级和价格类型的记录；价格统一折算为元/斤，不与首页示例数据混合。</p><select class="input" id="historyGroup" onchange="renderHistory()" aria-label="选择可比报价组"><option value="">暂无可比报价</option></select><div id="historyChart" aria-live="polite"><div class="empty">录入多天可比报价后显示走势</div></div></div>
+ <div id="quoteList" aria-live="polite"></div>
+ </div>
+ <div class="card"><strong>价格口径说明</strong><p class="small">产地收购价、市场批发价、商户报价不是同一种价格。真实数据应注明来源、日期、单位、品种和等级。</p></div>
+</section>
+
+<section id="compare" class="hide">
+ <div class="section-head"><h2>📊 全国产区同规格比价</h2><span class="small">目的地：河南临颍</span></div>
+ <div class="notice">比较数据全部来自「我的报价记录」，并非市场实时行情。相同品种、等级及价格类型才可并排查看；同日多条报价不会擅自平均。</div>
+ <div class="card">
+  <label class="fieldlabel" for="cmpGroup">选择可比规格</label><select class="input" id="cmpGroup" onchange="renderCompare()"><option>请先录入报价</option></select>
+  <div class="row" style="align-items:flex-start;flex-wrap:wrap"><label class="fieldlabel"><input id="cmpOld" type="checkbox" onchange="renderCompare()"> 包含超过 7 天的旧报价</label><span class="small">默认仅显示近 7 天</span></div>
+  <div id="cmpSummary" class="hint" style="margin:12px 0"></div><div id="cmpList"></div>
+ </div>
+ <div class="card"><strong>🔎 可信度筛选</strong><p class="hint">未核实报价保留供参考；即使是“本人已复核”也不代表价格仍然可成交。点击原始网页链接核对最新日期与规格。默认仍只展示近 7 天记录。</p><label class="fieldlabel"><input type="checkbox" id="cmpVerified" onchange="renderCompare()"> 只显示本人已复核的报价</label></div>
+ <div class="card"><strong>🚚 将选定报价带入收购计算器</strong><p class="hint">点报价右侧的「拿去核算」，会自动带入产地和元/斤收购价。运费、损耗和费用仍须按实际填入，不自动猜测。</p></div>
+ <div class="card"><strong>⚠️ 可比性边界</strong><p class="hint">规格分组仅按照文字完全一致的品种、等级、价格类型。即使显示为同组，仍要人工比对干湿度、把柄、花皮、杂质、包装、发票、结算方式与交货地点。公开参考价和实地成交价不能混用。</p></div>
+</section>
+
+<section id="purchase" class="hide">
+ <div class="section-head"><h2>🚚 临颍到货成本与利润</h2><span class="small">元 / 斤 · 按净货重</span></div>
+ <div class="notice">请填写实际采购数据，本页不预设虚构价格。所有金额单位为元，重量为市斤（1 斤 = 0.5 公斤）。计算结果是输入假设下的估算，不是实时行情。</div>
+ <div class="card"><strong>采购方案 · 外地 → 临颍</strong>
+ <label class="fieldlabel" for="sourcePlace">采购产地</label><input class="input" id="sourcePlace" placeholder="如：山东金乡">
+ <div class="calc-grid">
+  <div><label class="fieldlabel" for="buyPrice">当地收购价（元/斤）</label><input class="input" id="buyPrice" type="number" min="0" step="0.01" inputmode="decimal" placeholder="必填"></div>
+  <div><label class="fieldlabel" for="quantity">采购毛重（斤）</label><input class="input" id="quantity" type="number" min="0" step="1" inputmode="decimal" placeholder="必填"></div>
+  <div><label class="fieldlabel" for="shipping">总运费（元）</label><input class="input" id="shipping" type="number" min="0" step="1" inputmode="decimal" placeholder="0"></div>
+  <div><label class="fieldlabel" for="handling">装卸 / 短驳（元）</label><input class="input" id="handling" type="number" min="0" step="1" inputmode="decimal" placeholder="0"></div>
+  <div><label class="fieldlabel" for="loss">净重损耗率（%）</label><input class="input" id="loss" type="number" min="0" max="99.99" step="0.1" inputmode="decimal" placeholder="0"></div>
+  <div><label class="fieldlabel" for="packing">包装 / 整理（元）</label><input class="input" id="packing" type="number" min="0" step="1" inputmode="decimal" placeholder="0"></div>
+  <div><label class="fieldlabel" for="storage">仓储 / 保管（元）</label><input class="input" id="storage" type="number" min="0" step="1" inputmode="decimal" placeholder="0"></div>
+  <div><label class="fieldlabel" for="taxes">税费 / 其他费用（元）</label><input class="input" id="taxes" type="number" min="0" step="1" inputmode="decimal" placeholder="0"></div>
+  <div><label class="fieldlabel" for="finance">资金成本（元）</label><input class="input" id="finance" type="number" min="0" step="1" inputmode="decimal" placeholder="0"></div>
+  <div><label class="fieldlabel" for="localPrice">临颍同级本地买价（元/斤）</label><input class="input" id="localPrice" type="number" min="0" step="0.01" inputmode="decimal" placeholder="可留空"></div>
+  <div><label class="fieldlabel" for="sellPrice">预计销售价（元/净斤）</label><input class="input" id="sellPrice" type="number" min="0" step="0.01" inputmode="decimal" placeholder="可留空"></div>
+  <div><label class="fieldlabel" for="sellExpenses">额外销售费用（元/批）</label><input class="input" id="sellExpenses" type="number" min="0" step="1" inputmode="decimal" placeholder="0"></div>
+ </div><button class="btn" style="width:100%;margin-top:12px" onclick="calculatePurchase()">计算到货成本与预计毛利</button>
+ <div id="purchaseResult" aria-live="polite"></div>
+ <p class="hint">净重 = 毛重 × (1 − 损耗率)；到货净斤成本 = (毛重 × 收购价 + 各项采购费用) ÷ 净重。利润以预计全部净重售完为前提，不计未填写的隐性风险。</p>
+ </div>
+</section>
+
+<section id="supply" class="hide">
+ <div class="section-head"><h2>全国货源</h2><span class="small">演示信息</span></div>
+ <div class="notice">供应/求购内容为虚构演示。正式上线需增加用户登录、信息审核、举报和隐私保护。</div>
+ <div class="tabs"><button class="chip active" onclick="setSupply('全部',this)">全部</button><button class="chip" onclick="setSupply('供应',this)">供应</button><button class="chip" onclick="setSupply('求购',this)">求购</button></div>
+ <div id="supplyList"></div>
+ <div class="card">
+  <h3 style="font-size:15px;margin:0 0 12px">发布供求（本地演示）</h3>
+  <label class="fieldlabel">信息类型</label><select class="input" id="sType"><option>供应</option><option>求购</option></select>
+  <label class="fieldlabel">品种</label><input class="input" id="sVariety" placeholder="如：三樱椒通货">
+  <label class="fieldlabel">产地 / 交货地</label><input class="input" id="sPlace" placeholder="如：河南柘城">
+  <label class="fieldlabel">数量与价格</label><input class="input" id="sPrice" placeholder="如：10吨，价格面议">
+  <button class="btn" onclick="addSupply()">添加到本机演示列表</button>
+ </div>
+</section>
+
+<section id="news" class="hide">
+ <div class="section-head"><h2>🔎 行情与政策查询入口</h2></div>
+ <div class="notice">这里提供外部网站入口，不等于已经读取或核验其当日价格。打开后，请核对发布日期、单位、品种、等级和价格环节。网站可能变化，部分栏目不提供干辣椒产地报价。</div>
+ <div class="card"><strong>🔗 已核实存在的公开查询入口（需人工查看）</strong>
+ <div class="list-item"><strong>科炬 · 辣椒价格指数</strong><p>有分产地、品种、等级和发布日期的分类报价；属于第三方平台报价，不等于你的即时成交价。自动采集/转载授权尚未取得。</p><p><a href="https://lajiaow.cn/" target="_blank" rel="noopener noreferrer">打开科炬原站 ↗</a></p></div>
+ <div class="list-item"><strong>新华指数 · 中国干辣椒系列价格指数</strong><p>展示三樱椒、新一代等指数趋势。指数点数不能直接当成“元/斤”价格使用。</p><p><a href="https://indices.cnfin.com/4948/index.html?idx=0" target="_blank" rel="noopener noreferrer">查看新华指数 ↗</a></p></div>
+ <div class="list-item"><strong>农业农村部 · 批发市场信息</strong><p>全国农产品批发市场汇总监测，并非临颍干辣椒产地即时收购价；核对具体品种和价格口径。</p><p><a href="https://pfsc.agri.cn/" target="_blank" rel="noopener noreferrer">查询农业农村部信息 ↗</a></p></div>
+ </div> <div class="card"><strong>录入公开报价前请确认</strong><p class="hint">① 报价页面具体链接或发布主体；② 日期；③ 产区和交易市场；④ 品种等级与水分；⑤ 元/斤还是元/公斤；⑥ 询价、挂牌价还是实际成交价。禁止把无法确认来源的数字标记为已核验。</p></div>
+</section>
+
+<section id="profile" class="hide">
+ <div class="section-head"><h2>🗂 我的数据与备份</h2></div>
+ <div class="card"><strong>存储说明</strong><p class="hint">报价保存在当前浏览器的本机存储中，不会上传到 GitHub；更换手机、无痕模式、清除网站数据可能导致丢失。V6 仍沿用 V3–V5 的浏览器报价存储键；新版导出含 13 列来源及核验字段，导入兼容旧版 9 列 CSV。建议经常到「报价」栏目导出 CSV 保存到“文件”App。</p><div class="row"><button class="btn" onclick="switchTab('prices')">前往导出 CSV</button><button class="btn outline" onclick="switchTab('news')">核验行情来源</button></div></div>
+ <div class="card"><strong>📌 核验规则</strong><p class="hint">待核实、本人已复核均为用户自行填写；没有平台认证标记。超过 7 天的报价提醒陈旧，未来日期不可保存；不同品种、等级、价格类型不混排。价格指数不是收购单价。</p></div>
+ <div class="card"><strong>关于数据可信度</strong><p class="hint">平台未连接自动更新的、经授权的实时报价接口。本机记录的来源由用户填写，产品只做字段及日期检查，不负责证明其真实性。V5 不会以虚构价格填充行情榜单。</p></div>
+ <div class="card"><strong>版本信息</strong><p class="hint">辣椒行情通 V6 · 单文件离线可用原型。保存记录及比价依赖浏览器本地存储；在线使用仍需上传到原 GitHub Pages 仓库。</p></div>
+</section>
+<div class="footer-note">辣椒行情通 V6 · 来源留痕及本人核验 · 无自动实时行情 · 所有自录报价未经平台核验 · 请先核实再成交</div>
+</main>
+<nav class="nav" aria-label="主导航">
+ <button class="active" data-tab="home" onclick="switchTab('home',this)"><b>⌂</b>首页</button>
+ <button data-tab="prices" onclick="switchTab('prices',this)"><b>▤</b>报价</button>
+ <button data-tab="compare" onclick="switchTab('compare',this)"><b>⇆</b>比价</button>
+ <button data-tab="purchase" onclick="switchTab('purchase',this)"><b>▦</b>收购</button>
+ <button data-tab="supply" onclick="switchTab('supply',this)"><b>▧</b>货源</button>
+ <button data-tab="profile" onclick="switchTab('profile',this)"><b>♙</b>我的</button>
+</nav>
+</div>
+<script>
+const priceData=[
+ {name:'三樱椒',place:'河南柘城',grade:'通货 · 示例',price:5.80,change:'+0.10',dir:'up',source:'演示数据'},
+ {name:'三樱椒',place:'河南临颍',grade:'通货 · 示例',price:5.65,change:'-0.05',dir:'down',source:'演示数据'},
+ {name:'新一代',place:'河南',grade:'上统货 · 示例',price:6.20,change:'+0.08',dir:'up',source:'演示数据'},
+ {name:'北京红',place:'内蒙古开鲁',grade:'通货 · 示例',price:4.90,change:'-0.02',dir:'down',source:'演示数据'},
+ {name:'三樱椒',place:'山东金乡',grade:'上通货 · 示例',price:5.72,change:'+0.00',dir:'flat',source:'演示数据'}
+];
+let region='全部',supplyType='全部';
+let supplies=[
+ {type:'供应',name:'三樱椒通货',place:'河南柘城（示例）',qty:'10 吨',price:'价格面议',date:'演示条目'},
+ {type:'求购',name:'新一代干辣椒',place:'山东（示例）',qty:'5 吨',price:'按质量议价',date:'演示条目'},
+ {type:'供应',name:'北京红干椒',place:'内蒙古开鲁（示例）',qty:'20 吨',price:'价格面议',date:'演示条目'}
+];
+function calculatePurchase(){
+ const el=document.getElementById('purchaseResult');
+ const get=id=>document.getElementById(id).value.trim();
+ const required=['buyPrice','quantity'];
+ if(required.some(id=>get(id)==='')){el.innerHTML='<div class="result">请先填写实际收购价和采购毛重；其他费用可留空，按 0 计算。</div>';return;}
+ const ids=['buyPrice','quantity','shipping','handling','loss','packing','storage','taxes','finance','localPrice','sellPrice','sellExpenses'];
+ const n=id=>get(id)===''?0:Number(get(id));
+ if(ids.some(id=>get(id)!==''&&(!Number.isFinite(n(id))||n(id)<0))||n('buyPrice')<=0||n('quantity')<=0||n('loss')>=100){el.innerHTML='<div class="result">请输入有效非负数字，收购价和采购量必须大于 0，损耗率需小于 100%。</div>';return;}
+ const q=n('quantity'),net=q*(1-n('loss')/100);
+ const purchaseCost=q*n('buyPrice');const fees=['shipping','handling','packing','storage','taxes','finance'].reduce((a,k)=>a+n(k),0);
+ const total=purchaseCost+fees,unit=total/net;
+ const fmt=v=>Number(v).toLocaleString('zh-CN',{minimumFractionDigits:2,maximumFractionDigits:2});
+ let body='<div class="result"><div class="small">预计到临颍每净斤成本</div><strong>'+fmt(unit)+' 元/斤</strong><p>采购货款：'+fmt(purchaseCost)+' 元<br>其他采购费用：'+fmt(fees)+' 元<br>总到货成本：'+fmt(total)+' 元<br>可销售净重：'+fmt(net)+' 斤</p>';
+ if(get('localPrice')!==''){let diff=n('localPrice')-unit;body+='<p><b>与临颍同级买价 '+fmt(n('localPrice'))+' 元/斤相比：</b>外地方案每净斤'+(diff>=0?'低 ':'高 ')+fmt(Math.abs(diff))+' 元。此处未另外核算本地采购损耗和费用。</p>';}
+ if(get('sellPrice')!==''){const revenue=net*n('sellPrice'),margin=revenue-total-n('sellExpenses');body+='<p><b>预计整批销售收入：</b>'+fmt(revenue)+' 元<br><b>扣除额外销售费后预计毛利：</b><span style="color:'+(margin>=0?'#16845b':'#c9332b')+'">'+fmt(margin)+' 元</span><br>每净斤预计毛利：'+fmt(margin/net)+' 元；以净重全部按设定单价售完为前提。</p>';}
+ body+='<p class="hint">用于收购测算，未列明的质量损失、税务处理与交易风险需另行评估。</p></div>';el.innerHTML=body;
+}
+function switchTab(tab,btn){document.querySelectorAll('main section').forEach(s=>s.classList.add('hide'));document.getElementById(tab).classList.remove('hide');document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));if(tab==='prices'){renderQuotes();}if(tab==='compare'){renderCompareOptions();}if(tab==='supply')renderSupply();window.scrollTo(0,0)}
+function setFilter(r,btn){region=r;document.querySelectorAll('#priceChips .chip').forEach(x=>x.classList.remove('active'));btn.classList.add('active');renderPrices()}
+function renderPrices(){const q=(document.getElementById('priceSearch')?.value||'').trim().toLowerCase();const arr=priceData.filter(x=>(region==='全部'||x.place.includes(region))&&(x.name+x.place+x.grade).toLowerCase().includes(q));document.getElementById('priceList').innerHTML=arr.length?arr.map(x=>`<div class="card"><div class="row"><div><strong>${x.name}</strong><p class="small">${x.place} · ${x.grade}</p></div><div style="text-align:right"><div class="price" style="font-size:22px">${x.price.toFixed(2)} <span class="unit">元/斤</span></div><div class="${x.dir==='up'?'up':x.dir==='down'?'down':'small'}">${x.dir==='up'?'▲':x.dir==='down'?'▼':'—'} ${x.change}（示例）</div></div></div><p class="small">来源：${x.source}　更新时间：演示时间</p></div>`).join(''):'<div class="empty">没有匹配的演示数据</div>'}
+function setSupply(t,btn){supplyType=t;document.querySelectorAll('#supply .tabs .chip').forEach(x=>x.classList.remove('active'));btn.classList.add('active');renderSupply()}
+function renderSupply(){const arr=supplies.filter(x=>supplyType==='全部'||x.type===supplyType);document.getElementById('supplyList').innerHTML=arr.map(x=>`<div class="card"><div class="row"><strong>${x.name}</strong><span class="tag">${x.type} · 演示</span></div><p class="small">${x.place}　|　${x.qty}</p><div class="row"><span class="small">${x.price}</span><span class="small">${x.date}</span></div></div>`).join('')}
+function addSupply(){const name=document.getElementById('sVariety').value.trim();const place=document.getElementById('sPlace').value.trim();const qty=document.getElementById('sPrice').value.trim();if(!name||!place||!qty){alert('请填写品种、产地和数量/价格');return}supplies.unshift({type:document.getElementById('sType').value,name,place:place+'（本机演示）',qty,price:'用户填写',date:'本机新增'});document.getElementById('sVariety').value='';document.getElementById('sPlace').value='';document.getElementById('sPrice').value='';renderSupply();alert('已添加到当前页面的演示列表；刷新页面后不会保留，也不会发布给其他用户。')}
+// 报价只保存在当前浏览器，不与演示报价合并、不向 GitHub 上传。
+const quoteKey='lajiao_quote_records_v3';
+function readQuotes(){try{const data=JSON.parse(localStorage.getItem(quoteKey)||'[]');return Array.isArray(data)?data:[]}catch(e){return []}}
+function esc(t){return String(t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function safeUrl(url){try{const u=new URL(String(url||''));return ['https:','http:'].includes(u.protocol)?u.href:''}catch(e){return ''}}
+function verifiedMeta(q){const check=q.check==='本人已复核' && q.checkedAt && q.checkedAt<=todayLocal();return check?'本人已复核':'待核实'}
+function originLink(q){const u=safeUrl(q.url);return u?'<a href="'+esc(u)+'" target="_blank" rel="noopener noreferrer">查看原始来源 ↗</a>':'无公开原始链接'}
+function freshness(q){const age=ageDays(q.date);return age>7?'<span style="color:#b64b27">⚠ '+age+' 天前，旧报价</span>':age<0?'<span style="color:#b64b27">日期异常</span>':'<span style="color:#16845b">'+(age===0?'当日':'近7天')+'</span>'}
+function saveQuote(){
+ const date=document.getElementById('qDate').value,variety=document.getElementById('qVariety').value.trim(),grade=document.getElementById('qGrade').value.trim(),place=document.getElementById('qPlace').value.trim(),priceStr=document.getElementById('qPrice').value,source=document.getElementById('qSource').value.trim();
+ const price=Number(priceStr), rawUrl=document.getElementById('qUrl').value.trim(),method=document.getElementById('qMethod').value,check=document.getElementById('qCheck').value,checkedAt=document.getElementById('qCheckedAt').value;
+ if(!date||date>todayLocal()||!/^\d{4}-\d{2}-\d{2}$/.test(date)||Number.isNaN(Date.parse(date+'T00:00:00'))){alert('请填写正确的报价日期，不能填写未来日期');return}
+ if(!variety||!grade||!place||!source||priceStr.trim()===''||!Number.isFinite(price)||price<=0||price>100000){alert('请填写品种、等级、产地、正数价格和信息来源。');return}
+ if(rawUrl&&!safeUrl(rawUrl)){alert('原始链接仅支持以 https:// 或 http:// 开头的有效网址');return}
+ if(check==='本人已复核'&&(!checkedAt||checkedAt>todayLocal()||checkedAt<date)){alert('本人已复核需要填写有效核验日期，且不能早于报价日期或晚于今天');return}
+ const item={id:Date.now()+'-'+Math.random().toString(36).slice(2),date,variety,grade,place,price,unit:document.getElementById('qUnit').value,kind:document.getElementById('qKind').value,source,remark:document.getElementById('qRemark').value.trim(),url:safeUrl(rawUrl),method,check,checkedAt:check==='本人已复核'?checkedAt:''};
+ const data=readQuotes();data.unshift(item);try{localStorage.setItem(quoteKey,JSON.stringify(data))}catch(e){alert('保存失败。请检查浏览器本地存储。');return}
+ document.getElementById('qPrice').value='';document.getElementById('qRemark').value='';renderQuotes();alert('保存成功。核验标签由用户自行填写，请定期导出 CSV 备份。');
+}
+function renderQuotes(){const items=readQuotes();document.getElementById('quoteCount').textContent=items.length;
+ document.getElementById('quoteList').innerHTML=items.length?items.slice(0,100).map(q=>`<div class="list-item"><div class="row"><strong>${esc(q.variety)} · ${esc(q.place)}</strong><b>${Number(q.price).toFixed(2)} 元/${esc(q.unit)}</b></div><p>${esc(q.date)} · ${esc(q.grade)} · ${esc(q.kind)} · ${freshness(q)}<br>来源：${esc(q.source)} · ${esc(q.method||'旧版记录')}<br><b>${esc(verifiedMeta(q))}</b>${q.checkedAt&&verifiedMeta(q)==='本人已复核'?' · 核验日 '+esc(q.checkedAt):''}<br>${originLink(q)}${q.remark?'<br>备注：'+esc(q.remark):''}</p><button class="chip" style="margin-top:7px" onclick="deleteQuote('${esc(q.id)}')">删除此条</button></div>`).join(''):'<div class="empty">暂无报价记录。可从原始来源核对后手动录入。</div>';
+ renderHistoryOptions();renderCompareOptions();updateHomeCount()}
+function deleteQuote(id){if(!confirm('确定删除此条记录吗？建议先导出备份。'))return;try{localStorage.setItem(quoteKey,JSON.stringify(readQuotes().filter(x=>x.id!==id)));renderQuotes()}catch(e){alert('删除失败')}}
+function exportQuotes(){const data=readQuotes();if(!data.length){alert('没有记录可以导出');return}
+ const heads=['日期','品种','等级','产地','价格','计价单位','价格类型','来源','备注','原始链接','信息取得方式','核验状态','最近核验日期'];
+ const fields=['date','variety','grade','place','price','unit','kind','source','remark','url','method','check','checkedAt'];
+ const cell=x=>'"'+String(x??'').replace(/"/g,'""')+'"';const csv='\uFEFF'+heads.map(cell).join(',')+'\r\n'+data.map(q=>fields.map(k=>cell(q[k])).join(',')).join('\r\n');const blob=new Blob([csv],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='辣椒报价记录_V6_'+todayLocal()+'.csv';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1200)}
+// V4: CSV recovery (V3 schema), date/unit/source validation; append without losing existing V3 browser records.
+function csvRows(text){
+ text=text.replace(/^\uFEFF/,'');const rows=[];let row=[],field='',quoted=false;
+ for(let i=0;i<text.length;i++){
+  const c=text[i];if(quoted){if(c==='"'&&text[i+1]==='"'){field+='"';i++}else if(c==='"')quoted=false;else field+=c}
+  else if(c==='"')quoted=true;else if(c===','){row.push(field);field=''}else if(c==='\n'||c==='\r'){if(c==='\r'&&text[i+1]==='\n')i++;row.push(field);if(row.some(v=>v!==''))rows.push(row);row=[];field=''}else field+=c;
+ }
+ if(quoted)throw Error('CSV 引号没有正确闭合');row.push(field);if(row.some(v=>v!==''))rows.push(row);return rows;
+}
+const csvNames=['日期','品种','等级','产地','价格','计价单位','价格类型','来源','备注'];
+const csvExtras=['原始链接','信息取得方式','核验状态','最近核验日期'];
+function quoteSignature(q){return [q.date,q.variety,q.grade,q.place,Number(q.price).toFixed(6),q.unit,q.kind,q.source,q.remark||'',q.url||''].join('\u001f')}
+function importQuotesFile(file){if(!file)return;if(file.size>2*1024*1024){alert('备份文件请小于2MB');return}
+ const reader=new FileReader();reader.onerror=()=>alert('文件读取失败');reader.onload=()=>{try{
+ const rows=csvRows(String(reader.result));if(rows.length<2)throw Error('CSV 中没有报价记录');
+ const header=rows.shift().map(x=>x.trim());const v6=header.length===13&&csvExtras.every((x,i)=>header[9+i]===x);
+ if(![9,13].includes(header.length)||csvNames.some((x,i)=>header[i]!==x)||(header.length===13&&!v6))throw Error('CSV 格式不匹配，应为旧版9列或新版13列报价文件');
+ const existing=readQuotes(),seen=new Set(existing.map(quoteSignature)),newRows=[];let duplicates=0;
+ for(let i=0;i<rows.length;i++){
+ const r=rows[i].map(x=>x.trim());if(r.length!==header.length)throw Error('第 '+(i+2)+' 行列数不正确');
+ const [date,variety,grade,place,priceText,unit,kind,source,remark,url='',method='',check='',checkedAt='']=r;const price=Number(priceText);
+ if(date>todayLocal()||!/^\d{4}-\d{2}-\d{2}$/.test(date)||Number.isNaN(Date.parse(date+'T00:00:00'))||!variety||!grade||!place||!source||!Number.isFinite(price)||price<=0||price>100000||!['斤','公斤'].includes(unit)||!['产地收购报价','市场批发报价','实际成交价','其他参考报价'].includes(kind))throw Error('第 '+(i+2)+' 行有无效报价字段');
+ if(url&&!safeUrl(url))throw Error('第 '+(i+2)+' 行来源链接无效');
+ if(v6&&check&&!['待核实','本人已复核'].includes(check))throw Error('第 '+(i+2)+' 行核验状态不合法');
+ if(check==='本人已复核'&&(!checkedAt||checkedAt>todayLocal()||checkedAt<date))throw Error('第 '+(i+2)+' 行核验日期错误');
+ const obj={id:'imp-'+Date.now()+'-'+i+'-'+Math.random().toString(36).slice(2),date,variety,grade,place,price,unit,kind,source,remark,url:safeUrl(url),method:method||'旧版导入',check:check||'待核实',checkedAt:check==='本人已复核'?checkedAt:''};
+ const sig=quoteSignature(obj);if(seen.has(sig)){duplicates++;continue}seen.add(sig);newRows.push(obj);
+ }
+ if(!confirm('文件 '+rows.length+' 条，拟新增 '+newRows.length+' 条，重复 '+duplicates+' 条。旧记录不会被覆盖。确定导入？'))return;
+ localStorage.setItem(quoteKey,JSON.stringify([...newRows,...existing]));renderQuotes();alert('成功导入 '+newRows.length+' 条。请定期备份。');
+ }catch(e){alert('无法导入：'+e.message)}};reader.readAsText(file,'UTF-8')}
+function quoteGroupKey(q){return [q.variety.trim(),q.place.trim(),q.grade.trim(),q.kind.trim()].join(' / ')}
+function renderHistoryOptions(){
+ const select=document.getElementById('historyGroup');if(!select)return;
+ const old=select.value;const groups=new Map();for(const q of readQuotes()){
+  if(!q.date||!Number.isFinite(Number(q.price))||Number(q.price)<=0||!['斤','公斤'].includes(q.unit))continue;
+  const key=quoteGroupKey(q);groups.set(key,(groups.get(key)||0)+1)
+ }
+ const labels=[...groups.entries()].sort((a,b)=>b[1]-a[1]);
+ select.innerHTML=labels.length?labels.map(([key,n])=>'<option value="'+esc(key)+'">'+esc(key)+'（'+n+'条）</option>').join(''):'<option value="">暂无报价记录</option>';
+ if(groups.has(old))select.value=old;renderHistory();
+}
+function renderHistory(){
+ const key=document.getElementById('historyGroup')?.value;const target=document.getElementById('historyChart');if(!target)return;
+ const list=readQuotes().filter(q=>quoteGroupKey(q)===key&&Number(q.price)>0).map(q=>({...q,jin:Number(q.price)/(q.unit==='公斤'?2:1)})).sort((a,b)=>a.date.localeCompare(b.date));
+ if(!key||!list.length){target.innerHTML='<div class="empty">暂无可用报价记录</div>';return}
+ // Multiple quotes on one date are shown separately and never silently averaged.
+ const data=list.slice(-60);if(data.length<2){target.innerHTML='<div class="empty">当前只有 1 条报价；再录入另一日期的同规格报价即可显示走势。</div>';return}
+ const values=data.map(q=>q.jin),lo=Math.min(...values),hi=Math.max(...values),range=(hi-lo)||1;
+ const points=data.map((q,i)=>({x:16+i*298/(data.length-1),y:115-85*(q.jin-lo)/range}));
+ const path=points.map((p,i)=>(i?'L':'M')+p.x.toFixed(2)+' '+p.y.toFixed(2)).join(' ');
+ const circles=points.map((p,i)=>'<circle cx="'+p.x.toFixed(2)+'" cy="'+p.y.toFixed(2)+'" r="3" fill="#c9332b"><title>'+esc(data[i].date+'：'+data[i].jin.toFixed(2)+' 元/斤（'+data[i].source+'）')+'</title></circle>').join('');
+ target.innerHTML='<svg viewBox="0 0 330 140" style="width:100%;height:160px" role="img" aria-label="自录报价历史折线图"><path d="M16 115H314" stroke="#ddd"/><path d="'+path+'" stroke="#c9332b" stroke-width="2.5" fill="none"/>'+circles+'<text x="16" y="136" font-size="10" fill="#777">'+esc(data[0].date)+'</text><text x="314" y="136" text-anchor="end" font-size="10" fill="#777">'+esc(data[data.length-1].date)+'</text></svg><p class="hint">'+data.length+' 条自行录入报价 · 最低 '+lo.toFixed(2)+' / 最高 '+hi.toFixed(2)+' 元/斤。报价可能来自不同渠道，图表不是认证市场指数。</p>';
+}
+
+function todayLocal(){const d=new Date();return [d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-')}
+function ageDays(date){const [y,m,d]=date.split('-').map(Number);const dateUTC=Date.UTC(y,m-1,d);const [yy,mm,dd]=todayLocal().split('-').map(Number);return Math.round((Date.UTC(yy,mm-1,dd)-dateUTC)/86400000)}
+function compareGroupKey(q){return [q.variety.trim(),q.grade.trim(),q.kind.trim()].join(' / ')}
+function renderCompareOptions(){
+ const el=document.getElementById('cmpGroup');if(!el)return;
+ const old=el.value,groups=new Map();for(const q of readQuotes()){if(q.variety&&q.grade&&q.kind)groups.set(compareGroupKey(q),(groups.get(compareGroupKey(q))||0)+1)}
+ const opts=[...groups].sort((a,b)=>b[1]-a[1]);el.innerHTML=opts.length?opts.map(([k,n])=>'<option value="'+esc(k)+'">'+esc(k)+'（'+n+'条）</option>').join(''):'<option value="">请先在「报价」中录入数据</option>';
+ if(groups.has(old))el.value=old;renderCompare();
+}
+function renderCompare(){
+ const el=document.getElementById('cmpList'),sum=document.getElementById('cmpSummary');if(!el)return;
+ const k=document.getElementById('cmpGroup').value,old=document.getElementById('cmpOld').checked,verified=document.getElementById('cmpVerified').checked;
+ const all=readQuotes().filter(q=>compareGroupKey(q)===k);
+ const items=all.filter(q=>Number(q.price)>0&&['斤','公斤'].includes(q.unit)).map(q=>({...q,priceJin:Number(q.price)/(q.unit==='公斤'?2:1),age:ageDays(q.date)})).filter(q=>q.age>=0&&(old||q.age<=7)&&(!verified||verifiedMeta(q)==='本人已复核')).sort((a,b)=>a.priceJin-b.priceJin);
+ sum.textContent=!k?'当前没有报价可比':`该规格共 ${all.length} 条，本次显示 ${items.length} 条${old?'（含旧报价）':'（近7天）'}${verified?'，只显示本人已复核':''}。价格低不代表到货成本低。`;
+ if(!items.length){el.innerHTML='<div class="empty">筛选后没有可比报价。检查时间范围或核验状态。</div>';return}
+ el.innerHTML=items.map(q=>'<div class="list-item"><div class="row" style="align-items:flex-start"><div><strong>'+esc(q.place)+'</strong><p>'+esc(q.date)+' · '+(q.age===0?'当日':q.age+' 天前')+' · '+(q.age>7?'⚠ 旧报价':'近7天')+'</p><p>'+esc(verifiedMeta(q))+' · '+esc(q.source)+'</p><p>'+originLink(q)+'</p>'+(q.remark?'<p>备注：'+esc(q.remark)+'</p>':'')+'</div><div style="text-align:right;min-width:110px"><strong style="font-size:17px;color:var(--red)">'+q.priceJin.toFixed(2)+'</strong><div class="small">元/斤</div><button class="btn outline" style="margin-top:9px" onclick="useForPurchase(&quot;'+esc(String(q.id).replace(/'/g,''))+'&quot;)">拿去核算 →</button></div></div></div>').join('')+'<p class="hint">核验状态是用户自述，不代表平台或来源网站认证。请以实际询价和质量验收为准。</p>';
+}
+function useForPurchase(id){const q=readQuotes().find(x=>String(x.id)===String(id));if(!q){alert('找不到该记录');return;}document.getElementById('sourcePlace').value=q.place;document.getElementById('buyPrice').value=(Number(q.price)/(q.unit==='公斤'?2:1)).toFixed(4);document.getElementById('purchaseResult').innerHTML='<div class="notice">已带入'+esc(q.place)+'的自录报价。请填写真实采购量、运费和损耗后再计算。</div>';switchTab('purchase');}
+function updateHomeCount(){const n=document.getElementById('homeQuoteCount');if(n)n.textContent=readQuotes().length;}
+if(document.getElementById('qDate'))document.getElementById('qDate').value=todayLocal();
+renderSupply();renderQuotes();renderCompareOptions();updateHomeCount();
+</script>
+</body></html>
